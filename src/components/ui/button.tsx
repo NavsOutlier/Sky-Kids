@@ -1,34 +1,40 @@
 import * as React from "react";
 import { cn } from "@/src/lib/utils";
+import { motion } from "framer-motion";
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: "default" | "outline" | "ghost" | "secondary" | "destructive";
+  variant?: "default" | "outline" | "ghost" | "secondary" | "destructive" | "sun";
   size?: "default" | "sm" | "lg" | "icon";
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant = "default", size = "default", ...props }, ref) => {
+    const variants = {
+      default: "bg-sky-medium text-white hover:bg-sky-dark shadow-md shadow-sky-100",
+      outline: "border-2 border-sky-100 bg-white hover:bg-sky-50 text-sky-dark",
+      ghost: "hover:bg-sky-50 text-sky-dark",
+      secondary: "bg-sky-light/20 text-sky-dark hover:bg-sky-light/30",
+      destructive: "bg-rose-400 text-white hover:bg-rose-500 shadow-md shadow-rose-100",
+      sun: "bg-sun-yellow text-slate-800 hover:bg-[#F9C93C] shadow-md shadow-amber-100 font-bold",
+    };
+
+    const sizes = {
+      default: "h-11 px-6 py-2",
+      sm: "h-9 rounded-2xl px-4 text-xs",
+      lg: "h-14 rounded-[2rem] px-10 text-lg",
+      icon: "h-11 w-11",
+    };
+
     return (
-      <button
+      <motion.button
         ref={ref}
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.98 }}
         className={cn(
-          "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-slate-950 disabled:pointer-events-none disabled:opacity-50",
-          {
-            "bg-slate-900 text-slate-50 hover:bg-slate-900/90":
-              variant === "default",
-            "border border-slate-200 bg-white hover:bg-slate-100 hover:text-slate-900":
-              variant === "outline",
-            "hover:bg-slate-100 hover:text-slate-900": variant === "ghost",
-            "bg-slate-100 text-slate-900 hover:bg-slate-100/80":
-              variant === "secondary",
-            "bg-red-500 text-slate-50 hover:bg-red-500/90":
-              variant === "destructive",
-            "h-9 px-4 py-2": size === "default",
-            "h-8 rounded-md px-3 text-xs": size === "sm",
-            "h-10 rounded-md px-8": size === "lg",
-            "h-9 w-9": size === "icon",
-          },
-          className,
+          "inline-flex items-center justify-center whitespace-nowrap rounded-full text-sm font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-200 disabled:pointer-events-none disabled:opacity-50",
+          variants[variant as keyof typeof variants],
+          sizes[size as keyof typeof sizes],
+          className
         )}
         {...props}
       />
